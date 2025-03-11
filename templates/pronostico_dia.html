@@ -1,0 +1,92 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div style="padding: 10px; background-color: #212529; color: white;background-image: linear-gradient(26deg, #1827c4, #8bd9fb);background-color: #212529">
+        <div class="container-pronostico" style="padding: 5% 0% 20px 0%">
+            <h2 class="display-1 text-center">Coloca la fecha para el pronóstico de demanda</h2>
+        </div>
+        <div class="container-pronostico" style="padding: 0% 10%">
+            <form class="" method="POST" action="/btn_prediccion_dia">
+
+                <input type="date" class="form-control"  style="border-radius: 25px" name="fecha" placeholder="yyyy-mm-dd" required="required"/>
+
+                <button class="btn-pred-zona btn btn-success" style="margin: 10px auto; display: block" type="submit">
+                    Obtener Predicción
+                </button>
+            </form>
+        </div>
+    </div>
+    {#    <div class="marco-caja">#}
+    {#        <form class="row" method="POST" action="/btn_prediccion_dia">#}
+    {#            <div class=" form-floating col">#}
+    {#                <input type="date" class="form-control" name="fecha" placeholder="yyyy-mm-dd" required="required"/>#}
+    {#                <label style="padding-left: 25px !important; overflow: hidden" for="fecha">Ingresa la fecha de la cual#}
+    {#                    deseas saber la cantidad de tickets</label>#}
+    {#            </div>#}
+    {#            <div class="col">#}
+    {#                <button class="btn-pred-zona btn btn-success" type="submit">Obtener Predicción</button>#}
+    {#            </div>#}
+    {#        </form>#}
+    {#        <div class="alert alert-info animate__animated animate__fadeInRight" role="alert"#}
+    {#             style="display: {{ display_alert_dia }}">#}
+    {#            La demanda pronosticada con RF es: {{ pronostico_dia }}#}
+    {#        </div>#}
+    {#    </div>#}
+    <div class="container">
+        <div class="marco-caja animate__animated animate__fadeInUp" style="display: {{ display_caja_dia }}">
+            <div>
+            </div>
+            <div class="row">
+                <div class="col-md-4" style="padding: 3% 0px">
+                    <div class="centrar-texto cabecera"> La demanda es</div>
+                    <div class="resultado" id="resultado">{{ pronostico_dia }}</div>
+                    <div class="centrar-texto pie"> De tickets pronosticados para el
+                        <strong>{{ new_date }}</strong></div>
+                </div>
+                <div class="col-md-8">
+                    <table class="table table-striped table-hover" id="reportTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Zona</th>
+                            <th scope="col">Cantidad de tickets provenientes de la zona</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">Zona 1</th>
+                            <td>{{ zona_1 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona 2</th>
+                            <td>{{ zona_2 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona 3</th>
+                            <td>{{ zona_3 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona 4</th>
+                            <td>{{ zona_4 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona 5</th>
+                            <td>{{ zona_5 }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Zona 6</th>
+                            <td>{{ zona_6 }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-success centrar adaptar-width" id="downloadButton"><i
+                            class="fa-solid fa-download icono"></i>Descargar
+                        reporte
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var pronostico_dia = {{ pronostico_dia }};
+    </script>
+{% endblock content %}

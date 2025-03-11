@@ -1,0 +1,68 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="marco-caja-editar-usuario">
+                    <p class="nombre-completo text-center dato-usuario fw-bolder h2">{{ fullnombre}}</p>
+                    <p class="cargo text-center fs-5"> {{ rol_equipo}}</p>
+
+                    <form method="POST" action="/editar_usuario" enctype="multipart/form-data">
+                        <input type="file" id="fileInput" name="photo" style="display: none;">
+                        <div class="edit d-flex justify-content-center">
+                            <label for="fileInput" style="cursor: pointer;">
+                                <img onclick="subirImagen()" src="{{ user_profile_photo_url }}"
+                                     class=" img-editar-usuario img-perfil "
+                                     id="imagePreview"
+                                     alt="Foto de perfil"
+                                     onerror="handleImageError()">
+                                <i class="fa-solid fa-pencil float-icon"></i>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn-responsive btn btn-success">Subir Foto</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center dato-usuario"><i class="fa-regular fa-envelope icono"></i>{{ correo }}
+                    </div>
+                    <div class="text-center dato-usuario"><i class="fa-solid fa-briefcase icono"></i>{{ rol_equipo }}</div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="marco-caja">
+                    <form action="/cambios_usuario" method="POST">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="fullname" id="fullname"
+                                   placeholder="nombre"
+                                   value="{{ fullnombre }}"
+                                   required>
+                            <label for="fullname">Nuevo nombre</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="username" id="username"
+                                   placeholder="username"
+                                   value="{{ usuario }}"
+                                   required>
+                            <label for="username">Nuevo nombre de usuario</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="cargo" id="cargo"
+                                   placeholder="cargo"
+                                   value="{{ rol_equipo }}"
+                                   required>
+                            <label for="cargo">Nuevo cargo</label>
+                        </div>
+                        <div class="d-grid gap-2 col-4 mx-auto">
+                            <button class="btn btn-success" id="guardar-cambios" type="submit">Guardar cambios
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {#                fin subir foto#}
+{% endblock content %}

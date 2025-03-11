@@ -1,0 +1,40 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <form method="post">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-auto">
+                    <h1><label for="modelo">Selecciona la zona que deseas pronosticar</label></h1>
+                </div>
+                <div class="col-md-auto d-flex align-items-center">
+                    <i style="font-size:24px" class="fa">&#xf054;</i>
+                </div>
+                <div class="col-sm-auto d-flex align-items-center">
+                    <select class="form-select boton-select" id="modelo" name="modelo">
+                        <option value="z1">Zona 1</option>
+                        <option value="z2">Zona 2</option>
+                        <option value="z3">Zona 3</option>
+                        <option value="z4">Zona 4</option>
+                        <option value="z5">Zona 5</option>
+                        <option value="z6">Zona 6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="marco-caja row">
+            <div class="form-floating col">
+                <input type="text" class="form-control" id="fecha" name="fecha" placeholder="yyyy-mm-dd"
+                       required="required">
+                <label style="padding-left: 25px !important; overflow: hidden" for="fecha">Ingrese una Fecha:</label>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn-pred-zona btn btn-success">Generar Predicción</button>
+            </div>
+
+        </div>
+    <div class="alert alert-info animate__animated animate__fadeInRight" role="alert"
+                 style="display: {{ display_alert_zona_dinamica }}">
+                La demanda pronosticada para la zona {{ modelo_seleccionado }} es: {{ resultados_zonax }}
+            </div>
+    </form>
+{% endblock content %}

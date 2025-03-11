@@ -1,0 +1,100 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Entrenar modelos del sistema</h1>
+        <p>Utiliza esta sección para actualizar los modelos usados en el sistema con datasets con nuevos datos</p>
+        <div class="marco-caja">
+            <form method="POST" action="/upload" enctype="multipart/form-data">
+                <div class="container-upload">
+                    <input class="upload_hide" type="file" name="file" id="upload_costum" onchange="displayFileName()">
+                    <label for="upload_costum" class="upload_label">
+                        <i class="fa-solid fa-file-csv"></i>
+                        <p class="drag_text text-center">Arrastra el archivo .CSV de tu nuevo dataset</p>
+                        <p id="file-name" class="file-name text-center"></p>
+                    </label>
+                </div>
+                <div id="cargando" class="d-none">
+                    <i class="fa-solid fa-gear fa-spin"></i>
+                </div>
+                <button onclick="mostrarCargando()" type="submit" class="centrar btn btn-success">
+                    <i class="fa-solid fa-dumbbell"></i> Iniciar 2entrenamiento
+                </button>
+            </form>
+            {#            <div class="mb-3">#}
+            {#                <form method="POST" action="/upload" enctype="multipart/form-data">#}
+            {#                    <input class="form-control" type="file" name="file" accept=".csv">#}
+            {#                    <button type="submit" class="centrar btn btn-success">#}
+            {#                        <i class="fa-solid fa-dumbbell"></i> Iniciar entrenamiento#}
+            {#                    </button>#}
+            {#                </form>#}
+            {#            </div>#}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                 style="display: {{ alert_display }}">
+                <strong>¡No se encontró dataset!</strong> Selecciona un archivo .csv para continuar con el
+                entrenamiento.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <p class="centrar animate__animated animate__fadeIn" data-bs-toggle="tooltip" data-bs-placement="right"
+               style="width: fit-content"
+               title="Un R2 cercano a 1 significa un modelo mejor entrenado">{{ r2 }}</p>
+            <!-- Button trigger modal -->
+            <button type="button" class=" centrar btn btn-success animate__animated animate__fadeIn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop" style="display: {{ display_confirmar_entrenar }} !important;">
+                <i class="fa-solid fa-check"></i>
+                Confirmar actualización de modelo
+            </button>
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Advertencia</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro que quieres actualizar el modelo de predicción del sistema?
+                            {{ mensaje_modelo_actualizado }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" id="confirmReplaceBtn" class="btn btn-primary">Sí, actualizar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function displayFileName() {
+            const fileInput = document.getElementById("upload_costum");
+            const fileNameDisplay = document.getElementById("file-name");
+
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                fileNameDisplay.textContent = "Archivo seleccionado: " + fileName;
+            } else {
+                fileNameDisplay.textContent = "";
+            }
+        }
+
+        function mostrarCargando() {
+            const miElemento = document.getElementById("cargando");
+            miElemento.classList.replace("d-none", "nueva-clase");
+        }
+
+        document.getElementById('confirmReplaceBtn').addEventListener('click', function () {
+            fetch('/save-model', {
+                method: 'POST',
+            })
+                .then(response => response.text())
+                .then(message => {
+                    alert(message);
+                    $('#confirmModal').modal('hide');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+{% endblock content %}

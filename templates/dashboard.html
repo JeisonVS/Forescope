@@ -1,0 +1,170 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <div class="txt_pequenio"> Bienvenido, la fecha del día de hoy
+                    es: {{ fecha_hoy.strftime('%d-%m-%Y') }}</div>
+                <h1 class="titulo">Dashboard</h1>
+            </div>
+            <div class="col-2">
+                <div class="marco-circulo">
+                    <div class="ticket"><i class="fa-solid fa-ticket fa-bounce"></i></i>{{ demanda_hoy }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="marco-caja-v2">
+            <div class="marco-interno-caja">
+                <p>La demanda pronósticada para los siguientes 10 días: </p>
+            <div class="row">
+                <div class="col-12">
+                    <div style="height: 500px">
+                        <canvas id="myChart2" height="393px"
+                                style="display: block; height: 315px; width: 100%"></canvas>
+                    </div>
+                </div>
+
+                {#<div class="col-4">
+                <table class="table" style="text-align: center;font-size: 15px">
+                    <thead>
+                    <tr>
+                        <th>Día</th>
+                        <th>Pronóstico de # tickets</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key,value in demanda_rf.iterrows() %}
+                        <tr>
+                            <td>{{ value['Date'] }}</td>
+                            <td>{{ value['demanda pronosticada'] }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>#}
+            </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="marco-caja-v2">
+                    <div class="marco-interno-caja" style="background-color: {{color}}">
+                        <i class="fa-solid fa-bell campana-dashboard"></i>
+                        <p class="fs-4 fw-bold">{{ ds_msj_main}}</p>
+                        <P class="fs-6">{{ ds_msj_sub }}</P>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="marco-caja-v2">
+                    <div class="marco-interno-caja" style="background-color: {{ fondo_ojo }}">
+                        <i class="fa-solid fa-eye{{ eye_slash }} campana-dashboard"></i>
+                        <p class="fs-4 fw-bold">{{ ds_msj_main_mail}}</p>
+                        <P class="fs-6">{{ ds_msj_sub_mail }}</P>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="marco-caja-v2">
+                    <div class="caja2-titulo">
+                        Zonas el día de hoy
+                    </div>
+                    <div id="regions_div" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var fechas;
+        var pronostico;
+        var labels = {{fechas_10 | tojson}};
+        var data = {{demanda_10dias | tojson}};
+
+        const ctx_2 = document.getElementById('myChart2');
+        new Chart(ctx_2, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# de Tickets',
+                    data: data,
+                    borderWidth: 1,
+                    fill: true,
+                    borderColor: 'rgb(75, 192, 33)',
+                    tension: 0.3,
+                    backgroundColor: 'rgba(255, 206, 86,0.1)'
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    },
+                    xAxes: [
+                        {
+                            type: 'time',
+                            time: {
+                                displayFormats: {
+                                    day: 'MMM D'
+                                }
+                            }
+                        }
+                    ]
+                },
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: Math.round,
+                        font: {
+                            weight: 'bold',
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+
+         google.charts.load('current', {
+            'packages':['geochart'],
+        });
+        google.charts.setOnLoadCallback(drawRegionsMap);
+
+        function drawRegionsMap() {
+            var data = google.visualization.arrayToDataTable([
+                ['Country', 'region', 'demanda'],
+                ['PE-LIM','Zona 1', {{ demanda_z1 }}],
+                ['PE-CAL','Zona 2', {{ demanda_z2 }}],
+                ['PE-ICA','Zona 3', {{ demanda_z3 }}],
+                ['PE-PAS','Zona 4', {{ demanda_z4 }}],
+                ['PE-AMA','Zona 5', {{ demanda_z5 }}],
+                ['PE-CAJ','Zona 5', {{ demanda_z5 }}],
+                ['PE-ANC','Zona 5', {{ demanda_z5 }}],
+                ['PE-AYA','Zona 6', {{ demanda_z6 }}],
+                ['PE-CUS','Zona 6', {{ demanda_z6 }}],
+                ['PE-LOR','Zona 6', {{ demanda_z6 }}]
+
+            ]);
+
+            var options = {region: 'PE', // Peru
+                resolution:'provinces',legend: 'none'};
+
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock content %}

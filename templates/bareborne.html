@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forescope - Ve el futuro antes de que pase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/forescope-favicon.svg') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/estilos.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    {#<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">#}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker({dateFormat: 'dd/mm/yy'});
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <i class="fab fa-wpexplorer icono" style="font-size: 1.5em; margin: 5px; color: white"></i>
+        <a id="forescope" class="navbar-brand animate__animated animate__bounce" href="#">Forescope</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ active_dashboard }}" aria-current="page" href="/dashboard"><i
+                            class="fa-solid fa-gauge-simple-high icono"></i>Dashboard</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ active_pronostico_dia }}" href="#" id="navbarDropdownMenuLink"
+                       role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-chart-line icono"></i>Pronóstico
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/pronostico_dia">General</a></li>
+                        <li><a class="dropdown-item" href="/prediccion_zona_dinamica">Por zona</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-pen-to-square icono"></i>Registrar
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Plan de contigencia</a></li>
+                        <li><a class="dropdown-item" href="/listar_alertas">Alerta</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ active_entrenar }}" href="/entrenar"><i
+                            class="fa-solid fa-dumbbell icono"></i> Entrenar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa-solid fa-circle-question icono"></i>Acerca de</a>
+                </li>
+
+            </ul>
+            <li class="nav-item dropdown ms-auto">
+                <a href="#" id="navbarDropdownMenuLink"
+                   style="text-decoration: none; color: white; text-transform: capitalize" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-gear icono btn-configuracion"
+                       style="color: #ffffff"></i>Bienvenido, {{ usuario }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="/editar_usuario">Configurar perfil</a></li>
+                    <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>
+                </ul>
+            </li>
+            {#            <img src="/static/img/perfil_default.jpg" class="img-fluid img-navbar" alt="img_perfil">#}
+            <img src="{{ user_profile_photo_url }}" class="img-perfil img-fluid img-navbar" id="img_perfil"
+                 alt="img_perfil"
+                 onerror="handleImageError()">
+        </div>
+    </div>
+</nav>
+{#<div class="contenido-bareborne">#}
+    {% block content %}
+    {% endblock content %}
+{#</div>#}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='javascript/javascript.js') }}"></script>
+</body>
+</html>

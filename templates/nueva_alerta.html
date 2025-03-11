@@ -1,0 +1,58 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Registrar una nueva alerta</h1>
+        <div class="marco-caja">
+            <form method="post" action="/alerta">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" name="correo" id="correo" placeholder="correo@correo.com"
+                           required>
+                    <label for="correo">Dirección de email a la que se le notificará</label>
+                </div>
+                <div class="row form-floating mb-3">
+                    <div class="col-md-10">
+                        <label for="treshold">Cantidad de tickets que disparará la alerta:</label>
+                    </div>
+                    <div class="col-md-2">
+                        <input class="form-control" type="number" name="treshold" id="treshold" required>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="mensaje" name="mensaje" placeholder="mensaje" required>
+                    <label for="mensaje">personaliza el mensaje que se mostrará en la alerta</label>
+                </div>
+
+                <div class="d-grid gap-2 col-4 mx-auto">
+                    <button class="btn btn-success" id="toastbtn" type="submit">Guardar plan de contingencia</button>
+                </div>
+            </form>
+            <div class="caja-alerta">
+                <div class="row">
+                    <div class="col-md-2 icono-centrar">
+                        <i class="fa-regular fa-bell icono-grande"></i>
+                    </div>
+                    <div class="col-md-10 mensaje-alerta" id="contentDiv">
+                        el texto que es el contenido de la alerta.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid gap-2 col-6 mx-auto alert alert-success animate__animated animate__fadeInUp" style="display: {{ display_alerta }} !important;" role="alert">
+            Alerta registrada satisfactoriamente.
+        </div>
+    </div>
+
+    <script>
+        // inicio mensaje dinamico
+        const textInput = document.getElementById('mensaje');
+        const contentDiv = document.getElementById('contentDiv');
+
+        textInput.addEventListener('input', function () {
+            // Obtener el valor actual de la caja de texto
+            const inputText = textInput.value;
+
+            contentDiv.textContent = inputText;
+        });
+        // fin mensaje dinamico
+    </script>
+{% endblock content %}

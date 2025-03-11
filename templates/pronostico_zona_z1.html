@@ -1,0 +1,37 @@
+{% extends 'bareborne.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-auto">
+            <h1>Selecciona la zona que deseas pronosticar</h1>
+        </div>
+        <div class="col-md-auto d-flex align-items-center">
+            <i style="font-size:24px" class="fa">&#xf054;</i>
+        </div>
+        <div class="col-sm-auto d-flex align-items-center">
+            <select class="form-select boton-select" aria-label="Default select example">
+                <option class="opcion" selected>Elige una zona</option>
+                <option class="opcion" value="1">Zona 1</option>
+                <option class="opcion" value="2">Zona 2</option>
+                <option class="opcion" value="3">Zona 3</option>
+            </select>
+        </div>
+    </div>
+    </div>
+    <div class="marco-caja">
+        <form class="row" method="POST" action="/prediccion_z1">
+            <div class=" form-floating col">
+                <input type="text" class="form-control" name="fecha" placeholder="yyyy-mm-dd" required="required"/>
+                <label style="padding-left: 25px !important; overflow: hidden" for="fecha">Ingresa la fecha de la
+                    cual
+                    deseas saber la cantidad de tickets</label>
+            </div>
+            <div class="col">
+                <button class="btn-pred-zona btn btn-success" type="submit">Obtener Predicción</button>
+            </div>
+        </form>
+        <div class="alert alert-info animate__animated animate__fadeInRight" role="alert"
+             style="display: {{ display_alert_z1 }}">
+            La demanda pronosticada para la zona es: {{ demanda_zona_z1 }}
+        </div>
+    </div>
+{% endblock content %}
